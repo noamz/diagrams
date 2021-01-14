@@ -42,14 +42,17 @@ boundWalk k p = (dx,dy)
     dx = maximum (map (fst . unr2) vs)
     dy = maximum (map (snd . unr2) vs)
 
+gridWalk :: Int -> Walk -> Diagram B
+gridWalk k p = (walk k p `atop` qplane dx dy)
+  where
+    (dx,dy) = boundWalk k p
+
 -- example: walkSVG 1 (readWalk "U2DU1DDU1DD") "out"
 walkSVG :: Int -> Walk -> String -> IO ()
 walkSVG k p basename = do
-  renderPretty (basename ++ ".svg") (mkWidth 1024) diag
+  renderPretty (basename ++ ".svg") (mkWidth 1024)
+    (gridWalk k p # centerXY # pad 1.25)
   return ()
-  where
-    (dx,dy) = boundWalk k p
-    diag = (walk k p `atop` qplane dx dy) # centerXY # pad 1.25
 
 -- example: walkSVG' 1 "U2DU1DDU1DD"
 walkSVG' :: Int -> String -> IO ()
