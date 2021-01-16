@@ -26,3 +26,26 @@ Various bits of visualization code based on the [diagrams](http://projects.haske
 *Luka> walkSVG' 0 "UUUD2UUD2UUUD2D2"
 ```
 ![UUUD2UUD2UUUD2D2](UUUD2UUD2UUUD2D2.svg)
+
+## LukaTree
+
+[LukaTree.hs](LukaTree.hs): visualizing trees as paths.  (This uses routines for visualizing operadic trees from the [LinLam](https://github.com/noamz/linlam) library.)
+
+Each tree is encoded as a Łukasiewicz path in four different ways, respectively via its preorder left-to-right, preorder right-to-left, postorder left-to-right, and postorder right-to-left traversals.
+
+```haskell
+> t = bin (bin (bin lea (bin lea lea)) lea) (bin (bin (bin lea lea) lea) (bin lea lea))
+> renderPretty "binwalk.svg" (mkWidth 1024) (treeWalksDiagram t)
+```
+![binwalk](binwalk.svg)
+
+```haskell
+> t = ter (bin lea lea) (ter lea lea (bin lea lea)) lea
+> renderPretty "terwalk.svg" (mkWidth 1024) (treeWalksDiagram t)
+```
+![terwalk](terwalk.svg)
+
+```haskell
+> renderPretty "allbin3walk.svg" (mkWidth 1024) (vsep 1 [treeWalksDiagram t | t <- kTree 2 3])
+```
+![allbin3walk](allbin3walk.svg)
