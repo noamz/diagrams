@@ -1,4 +1,4 @@
--- routines for drawing Łukasiewicz paths
+-- routines for drawing generalized Łukasiewicz paths
 
 module Luka where
 
@@ -8,21 +8,25 @@ import Diagrams.Backend.SVG
 import Data.List
 import Data.Char
 
-data Step = U Int | D
+data Step = U Int | D Int
   deriving (Show,Eq)
 
 type Walk = [Step]
 
 readWalk :: String -> Walk
 readWalk "" = []
-readWalk ('D':w) = D : readWalk w
-readWalk ('U':w) = U (read wn) : readWalk w'
+readWalk (c:w) = step c n : readWalk w'
   where
+    step :: Char -> Int -> Step
+    step 'D' = D
+    step 'U' = U
+    step _   = error "unrecognized step character"
     (wn,w') = span isDigit w
-
+    n = if null wn then 1 else read wn
+    
 stepV2 :: Step -> V2 Double
 stepV2 (U n) = unitX + fromIntegral n * unitY
-stepV2 D = unitX + unit_Y
+stepV2 (D n) = unitX + fromIntegral n * unit_Y
 
 qplane :: Double -> Double -> Diagram B
 qplane dx dy =
@@ -47,14 +51,14 @@ gridWalk k p = (walk k p `atop` qplane dx dy)
   where
     (dx,dy) = boundWalk k p
 
--- example: walkSVG 1 (readWalk "U2DU1DDU1DD") "out"
+-- example: walkSVG 1 (readWalk "U2DUDDUDD") "out"
 walkSVG :: Int -> Walk -> String -> IO ()
 walkSVG k p basename = do
   renderPretty (basename ++ ".svg") (mkWidth 1024)
     (gridWalk k p # centerXY # pad 1.25)
   return ()
 
--- example: walkSVG' 1 "U2DU1DDU1DD"
+-- example: walkSVG' 1 "U2DUDDUDD"
 walkSVG' :: Int -> String -> IO ()
 walkSVG' k s = walkSVG k (readWalk s) s
 

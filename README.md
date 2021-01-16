@@ -10,7 +10,7 @@ Various bits of visualization code based on the [diagrams](http://projects.haske
 
 ## Luka
 
-[Luka.hs](Luka.hs): some routines for visualizing Łukasiewicz paths:
+[Luka.hs](Luka.hs): some routines for visualizing generalized Łukasiewicz paths:
 
 ```haskell
 *Luka> walkSVG' 1 "U2DU1DDU1DD"
@@ -21,3 +21,8 @@ Various bits of visualization code based on the [diagrams](http://projects.haske
 *Luka> walkSVG' 1 "U1DU2DU1DDD"
 ```
 ![U1DU2DU1DDD](U1DU2DU1DDD.svg)
+
+```haskell
+*Luka> walkSVG' 0 "UUUD2UUD2UUUD2D2"
+```
+![UUUD2UUD2UUUD2D2](UUUD2UUD2UUUD2D2.svg)
