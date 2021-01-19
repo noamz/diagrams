@@ -34,13 +34,13 @@ Various bits of visualization code based on the [diagrams](http://projects.haske
 Each tree is encoded as a Łukasiewicz path in four different ways, respectively via its preorder left-to-right, preorder right-to-left, postorder left-to-right, and postorder right-to-left traversals.
 
 ```haskell
-> t = bin (bin (bin lea (bin lea lea)) lea) (bin (bin (bin lea lea) lea) (bin lea lea))
+> t = bin (bin (bin zer (bin zer zer)) zer) (bin (bin (bin zer zer) zer) (bin zer zer))
 > renderPretty "binwalk.svg" (mkWidth 2048) (treeWalksDiagram t)
 ```
 ![binwalk](diagrams/binwalk.svg)
 
 ```haskell
-> t = ter (bin lea lea) (ter lea lea (bin lea lea)) lea
+> t = ter (bin zer zer) (ter zer zer (bin zer zer)) zer
 > renderPretty "terwalk.svg" (mkWidth 1024) (treeWalksDiagram t)
 ```
 ![terwalk](diagrams/terwalk.svg)
@@ -49,3 +49,11 @@ Each tree is encoded as a Łukasiewicz path in four different ways, respectively
 > renderPretty "allbin3walk.svg" (mkWidth 1024) (vsep 1 [treeWalksDiagram t | t <- kTree 2 3])
 ```
 ![allbin3walk](diagrams/allbin3walk.svg)
+
+We can also consider the reverse translation from walks to trees.
+Here we interpret a walk not touching the x-axis as a tree with free leaves, respectively via its preorder left-to-right and preorder right-to-left traversals:
+```haskell
+> w = readWalk "U1U1U1D1U1D1D1U1U1D1"
+> renderPretty "walk2tree.svg" (mkWidth 1024) (hsep 1 [gridWalk 1 w # centerXY, treeDiagram (unpreLR w) # centerXY, treeDiagram (unpreRL w) # centerXY] # pad 1.1)
+```
+![allbin3walk](diagrams/walk2tree.svg)
